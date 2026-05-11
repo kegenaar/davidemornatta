@@ -23,32 +23,32 @@
 body {
   background-color: var(--bg);
   color: var(--text);
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 1rem;
-  line-height: 1.7;
+  font-family: 'Lucida Console', 'Courier New', monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
 }
 
 main {
-  max-width: 640px;
+  max-width: 600px;
   margin: 0 auto;
-  padding: 4rem 1.5rem 6rem;
+  padding: 2.5rem 1.25rem 3.5rem;
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 1.6rem;
   font-weight: normal;
   letter-spacing: 0.02em;
   color: var(--accent);
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.4rem;
 }
 
 h2 {
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: normal;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
 p {
@@ -58,7 +58,7 @@ p {
 hr {
   border: none;
   border-top: 1px solid var(--border);
-  margin: 2.5rem 0;
+  margin: 1.5rem 0;
 }
 
 /* ── Sections ─────────────────────────────────────── */
@@ -72,9 +72,9 @@ section {
 }
 
 .rule-desc {
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.75rem;
 }
 
 /* ── Shared media list ────────────────────────────── */
@@ -103,8 +103,8 @@ section {
 .current-list .media-item {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.65rem 0;
+  gap: 0.6rem;
+  padding: 0.45rem 0;
   border-bottom: 1px solid var(--border);
 }
 
@@ -113,13 +113,13 @@ section {
 }
 
 .media-title {
-  font-size: 1rem;
+  font-size: 0.875rem;
   color: var(--text);
 }
 
 /* ── Completed groups ─────────────────────────────── */
 .completed-group {
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.1rem;
 }
 
 .completed-group:last-child {
@@ -145,7 +145,7 @@ section {
 
 /* ── Completed list ───────────────────────────────── */
 .completed-list .completed-item {
-  padding: 0.75rem 0;
+  padding: 0.45rem 0;
   border-bottom: 1px solid var(--border);
 }
 
@@ -169,7 +169,7 @@ section {
 }
 
 .completed-comment {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
   font-style: italic;
 }
