@@ -1,5 +1,7 @@
 /* ── Reset & base ─────────────────────────────────── */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -7,16 +9,25 @@
 
 /* ── Palette (earth tones) ────────────────────────── */
 :root {
-  --bg:         #f5f0e8;   /* warm linen */
-  --surface:    #ede6d8;   /* parchment */
-  --border:     #c9bba8;   /* sand */
-  --text:       #2e2418;   /* dark espresso */
-  --text-muted: #7a6a57;   /* warm grey-brown */
-  --accent:     #5c3d1e;   /* dark walnut */
+  --bg: #f5f0e8;
+  /* warm linen */
+  --surface: #ede6d8;
+  /* parchment */
+  --border: #c9bba8;
+  /* sand */
+  --text: #2e2418;
+  /* dark espresso */
+  --text-muted: #7a6a57;
+  /* warm grey-brown */
+  --accent: #5c3d1e;
+  /* dark walnut */
 
-  --tag-book:   #3b5323;   /* forest green */
-  --tag-series: #7a4a1e;   /* burnt sienna */
-  --tag-game:   #2a3d5c;   /* slate blue */
+  --tag-book: #3b5323;
+  /* forest green */
+  --tag-series: #7a4a1e;
+  /* burnt sienna */
+  --tag-game: #2a3d5c;
+  /* slate blue */
 }
 
 /* ── Typography & body ────────────────────────────── */
@@ -66,9 +77,15 @@ section {
   margin-bottom: 0;
 }
 
+.subtitle {
+  color: var(--text-muted);
+  margin-top: 0.35rem;
+}
+
 .bio {
-  color: var(--text);
-  max-width: 480px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
 }
 
 .rule-desc {
@@ -95,9 +112,17 @@ section {
   flex-shrink: 0;
 }
 
-.media-type.book   { background-color: var(--tag-book); }
-.media-type.series { background-color: var(--tag-series); }
-.media-type.game   { background-color: var(--tag-game); }
+.media-type.book {
+  background-color: var(--tag-book);
+}
+
+.media-type.series {
+  background-color: var(--tag-series);
+}
+
+.media-type.game {
+  background-color: var(--tag-game);
+}
 
 /* ── Current list ─────────────────────────────────── */
 .current-list .media-item {
@@ -139,9 +164,17 @@ section {
   margin-bottom: 0.75rem;
 }
 
-.group-label.book   { background-color: var(--tag-book); }
-.group-label.series { background-color: var(--tag-series); }
-.group-label.game   { background-color: var(--tag-game); }
+.group-label.book {
+  background-color: var(--tag-book);
+}
+
+.group-label.series {
+  background-color: var(--tag-series);
+}
+
+.group-label.game {
+  background-color: var(--tag-game);
+}
 
 /* ── Completed list ───────────────────────────────── */
 .completed-list .completed-item {
