@@ -326,4 +326,30 @@ section {
   font-size: 1rem;
   color: var(--text-muted);
   font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.result-famous-label {
+  font-size: 0.85rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.result-famous {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.result-famous-item {
+  font-size: 1rem;
+  color: var(--text);
+  padding: 0.25rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.result-famous-item:last-child {
+  border-bottom: none;
 }

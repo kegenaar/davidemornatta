@@ -15,13 +15,15 @@
     <section id="personality-intro">
       <h1><a href="index.html" class="back-link">←</a> Personality</h1>
       <p class="rule-desc">
-        I am a big fan of the 16 personalities framework. I find it a useful lens for self-reflection. <br>
-        The types should not be seen as rigid labels, but a starting point for understanding how you think, decide, and
-        relate to others. <br>
-        I also love using this framework to understand how other people behave in order to be able to better relate to
-        them and make them feel seen.
-        <br>
-        <br>
+        The MBTI (Myers-Briggs Type Indicator) is a framework that sorts people into 16 personality types based on
+        four dimensions: how you gain energy (Extraversion / Introversion), how you take in information
+        (Sensing / iNtuition), how you make decisions (Thinking / Feeling), and how you organise your life
+        (Judging / Perceiving). Each combination of four letters produces a distinct profile with its own strengths,
+        blindspots, and way of moving through the world. <br><br>
+        I am a big fan of this framework. I find it a useful lens for self-reflection, and I love using it to
+        understand how other people behave — so I can better relate to them and make them feel seen. The types should
+        not be seen as rigid labels, but as a starting point for curiosity about yourself and others.
+        <br><br>
         The eight questions below are a rough approximation. Answer with what feels most natural, not
         what you think you should be. Results are only shown to you, nothing is stored. <br><br>
         For a deeper dive, visit the
@@ -159,12 +161,33 @@
         <hr />
         <p class="result-type" id="result-type"></p>
         <p class="result-desc" id="result-desc"></p>
+        <p class="result-famous-label">People who share your type</p>
+        <ul class="result-famous" id="result-famous"></ul>
       </div>
     </section>
 
   </main>
 
   <script>
+    const famous = {
+      INTJ: ["Elon Musk", "Nikola Tesla", "Walter White (Breaking Bad)"],
+      INTP: ["Albert Einstein", "Bill Gates", "Sherlock Holmes"],
+      ENTJ: ["Steve Jobs", "Napoleon Bonaparte", "Harvey Specter (Suits)"],
+      ENTP: ["Leonardo da Vinci", "Mark Twain", "Tony Stark (Iron Man)"],
+      INFJ: ["Martin Luther King Jr.", "Nelson Mandela", "Atticus Finch (To Kill a Mockingbird)"],
+      INFP: ["J.R.R. Tolkien", "William Shakespeare", "Frodo Baggins (The Lord of the Rings)"],
+      ENFJ: ["Barack Obama", "Oprah Winfrey", "Jon Snow (Game of Thrones)"],
+      ENFP: ["Robin Williams", "Walt Disney", "Anne of Green Gables"],
+      ISTJ: ["George Washington", "Warren Buffett", "Eddard Stark (Game of Thrones)"],
+      ISFJ: ["Mother Teresa", "Kate Middleton", "Samwise Gamgee (The Lord of the Rings)"],
+      ESTJ: ["Michelle Obama", "Henry Ford", "Hermione Granger (Harry Potter)"],
+      ESFJ: ["Taylor Swift", "Bill Clinton", "Forrest Gump"],
+      ISTP: ["Bruce Lee", "Clint Eastwood", "Arya Stark (Game of Thrones)"],
+      ISFP: ["Michael Jackson", "Bob Dylan", "Frida Kahlo"],
+      ESTP: ["Ernest Hemingway", "Donald Trump", "James Bond"],
+      ESFP: ["Adele", "Marilyn Monroe", "Jack Sparrow (Pirates of the Caribbean)"],
+    };
+
     const descriptions = {
       INTJ: "Independent and strategic. You see the long game clearly and pursue your vision with quiet determination.",
       INTP: "Curious and precise. You love pulling ideas apart to understand how everything fits together.",
@@ -220,6 +243,11 @@
 
       document.getElementById("result-type").textContent = type;
       document.getElementById("result-desc").textContent = descriptions[type];
+
+      const famousList = document.getElementById("result-famous");
+      famousList.innerHTML = famous[type]
+        .map(name => `<li class="result-famous-item">${name}</li>`)
+        .join("");
 
       const result = document.getElementById("quiz-result");
       result.classList.remove("hidden");
