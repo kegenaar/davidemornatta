@@ -353,3 +353,35 @@ section {
 .result-famous-item:last-child {
   border-bottom: none;
 }
+
+/* ── Days together ────────────────────────────────── */
+.together-count {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--accent);
+  margin-bottom: 1.25rem;
+}
+
+.days-box {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.day-square {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  background-color: var(--accent);
+  flex-shrink: 0;
+}
+
+.day-square.today {
+  outline: 1px solid var(--text);
+  outline-offset: 1px;
+}

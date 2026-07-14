@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>B - Davide Mornatta</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <main>
+
+    <section id="together">
+      <h1><a href="index.html" class="back-link">←</a> B</h1>
+      <p class="rule-desc">
+        Together since 11 June 2026. <br>
+        One little square for each precious day together.
+      </p>
+      <p class="together-count" id="together-count" aria-live="polite"></p>
+
+      <div class="days-box" id="days-box" role="img" aria-label="Days together"></div>
+    </section>
+
+  </main>
+
+  <script>
+    const START = new Date(2026, 5, 11);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    START.setHours(0, 0, 0, 0);
+
+    const msPerDay = 86400000;
+    const daysTogether = Math.floor((today - START) / msPerDay) + 1;
+
+    // ponytail: self-check — fails if date math or start date drifts
+    console.assert(daysTogether >= 1);
+    console.assert(START.getFullYear() === 2026 && START.getMonth() === 5 && START.getDate() === 11);
+
+    document.getElementById("together-count").textContent =
+      daysTogether === 1 ? "1 day" : daysTogether + " days";
+
+    const box = document.getElementById("days-box");
+    const fmt = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric" });
+
+    for (let i = 0; i < daysTogether; i++) {
+      const day = new Date(START);
+      day.setDate(START.getDate() + i);
+
+      const cell = document.createElement("span");
+      cell.className = "day-square";
+      cell.title = fmt.format(day);
+      if (day.getTime() === today.getTime()) cell.classList.add("today");
+      box.appendChild(cell);
+    }
+
+    box.setAttribute("aria-label", daysTogether + " days");
+  </script>
+
+</body>
+
+</html>
