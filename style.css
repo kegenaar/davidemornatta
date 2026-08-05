@@ -219,6 +219,10 @@ section {
 }
 
 /* ── Things I care about ──────────────────────────── */
+.care-standalone {
+  margin: 0;
+}
+
 .care-list {
   list-style: none;
   padding: 0;
