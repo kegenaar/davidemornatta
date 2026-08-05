@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Humanity renamed genes because of Excel - Davide Mornatta</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <main>
+
+    <section id="article">
+      <h1><a href="index.html" class="back-link">←</a> Humanity renamed genes because of Excel</h1>
+
+      <p class="rule-desc">
+        In 2004, <a href="https://link.springer.com/article/10.1186/1471-2105-5-80" target="_blank"
+          rel="noopener">bioinformaticians started noticing</a> that, when processing tabular datasets, some gene names
+        were being changed inadvertently into non-gene names.
+      </p>
+
+      <p class="rule-desc">
+        Upon investigation, the culprit turned out to be
+        <a href="https://learn.microsoft.com/en-sg/answers/questions/5235482/gene-names-auto-converted-to-dates-in-microsoft-ex"
+          target="_blank" rel="noopener">Excel's automatic type conversion</a>.
+        When Microsoft Excel imports or pastes data, it automatically guesses the data type of each cell. A string like
+        "SEPT2" gets interpreted as 2-Sept.
+        This is convenient for most users, but for biologists it's a complete disaster.
+      </p>
+
+      <p class="rule-desc">
+        Imagine a molecular biology lab processing gene expression data.
+        One column has:
+      </p>
+      <ul class="gene-list">
+        <li>TP53</li>
+        <li>BRCA1</li>
+        <li>SEPT2</li>
+        <li>MARCH1</li>
+        <li>GATA3</li>
+      </ul>
+      <p class="rule-desc">It gets transformed into:</p>
+      <ul class="gene-list">
+        <li>TP53</li>
+        <li>BRCA1</li>
+        <li>2-Sep</li>
+        <li>1-Mar</li>
+        <li>GATA3</li>
+      </ul>
+
+      <p class="rule-desc">
+        When the spreadsheet is later exported, downstream software no longer recognizes those genes.
+        Instead of analyzing SEPT2 or MARCH1, the software simply sees dates and may ignore them, silently discarding
+        important data.
+        Researchers in 2016 scanned the leading genomics journals and revealed that
+        <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4994289/" target="_blank" rel="noopener">approximately
+          one-fifth of papers with supplementary Excel gene lists contained erroneous gene name conversions</a>.
+      </p>
+
+      <p class="rule-desc">
+        This also meant that a large number of widely used datasets contained corrupted data. Some of them probably are
+        still used without awareness of the problem or without being fixed.
+      </p>
+
+      <p class="rule-desc">
+        The funny turn of the story is that an uncommon decision was taken. To address the problem, in 2020 the HUGO
+        Gene
+        Nomenclature Committee decided to
+        <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7494048/" target="_blank" rel="noopener">rename dozens of
+          official human gene symbols</a>
+        so they could no longer be mistaken for dates.
+      </p>
+
+      <p class="rule-desc tldr">
+        Science adapted to the program.
+      </p>
+
+      <p class="rule-desc">
+        Symbols like SEPT1 became SEPTIN1 to avoid the problem.
+        And there is more, because, due to the above mentioned fact that millions of existing datasets still contained
+        the old errors, researchers have created dedicated tools to repair them.
+        Two examples are
+        <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5617173/" target="_blank" rel="noopener">"Escape Excel"
+          (2017)</a>, which prevents Excel from auto-converting problematic strings before import, and
+        <a href="https://www.nature.com/articles/s41598-022-17104-3" target="_blank" rel="noopener">"Gene Updater"
+          (2022)</a>, which automatically converts corrupted dates like "2-Sep" back into the correct modern gene
+        symbols.
+      </p>
+
+      <p class="rule-desc">
+        Jumping to the current times, the fix mentioned on
+        <a href="https://www.genenames.org/help/faq/#!/#tocAnchor-1-26-1" target="_blank" rel="noopener">HGNC FAQ
+          page</a>
+        remains changing the cell formatting to text before importing the data.
+      </p>
+
+      <p class="rule-desc tldr">
+        TLDR: Humanity permanently changed some gene names because they did not parse well on Excel.
+      </p>
+    </section>
+
+    <hr />
+
+    <section id="references">
+      <h2>References</h2>
+      <ol class="ref-list">
+        <li>
+          <a href="https://link.springer.com/article/10.1186/1471-2105-5-80" target="_blank" rel="noopener">Mistaken
+            Identifiers: Gene name errors can be introduced inadvertently when using Excel in bioinformatics</a>
+          (Zeeberg et al., 2004)
+        </li>
+        <li>
+          <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4994289/" target="_blank" rel="noopener">Gene name errors
+            are widespread in the scientific literature</a>
+          (Ziemann, Eren &amp; El-Osta, 2016)
+        </li>
+        <li>
+          <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5617173/" target="_blank" rel="noopener">Escape Excel</a>
+          (2017)
+        </li>
+        <li>
+          <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7494048/" target="_blank" rel="noopener">Guidelines for
+            Human
+            Gene Nomenclature</a>
+          (Bruford et al., 2020)
+        </li>
+        <li>
+          <a href="https://www.nature.com/articles/s41598-022-17104-3" target="_blank" rel="noopener">Gene Updater</a>
+          (2022)
+        </li>
+        <li>
+          <a href="https://www.genenames.org/help/faq/#!/#tocAnchor-1-26-1" target="_blank" rel="noopener">HGNC FAQ —
+            Excel is corrupting some of my gene symbols</a>
+        </li>
+        <li>
+          <a href="https://learn.microsoft.com/en-sg/answers/questions/5235482/gene-names-auto-converted-to-dates-in-microsoft-ex"
+            target="_blank" rel="noopener">Gene names auto-converted to dates in Microsoft Excel</a>
+          (Microsoft Q&amp;A)
+        </li>
+      </ol>
+    </section>
+
+  </main>
+
+</body>
+
+</html>
