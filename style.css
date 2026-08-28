@@ -377,23 +377,24 @@ hr {
 }
 
 .completed-meta {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1em minmax(0, 1fr) auto;
+  column-gap: 0.6rem;
   align-items: baseline;
-  gap: 0.75rem;
-  flex-wrap: wrap;
 }
 
-.completed-item > summary.completed-meta {
-  margin-bottom: 0;
+.completed-meta .media-title {
+  min-width: 0;
 }
 
 .completed-date {
-  margin-left: auto;
+  white-space: nowrap;
 }
 
-/* ponytail: Kundera has no review yet — pad to line up with titled rows that have a + */
-.completed-list > li.completed-item .completed-meta {
-  padding-left: 1.6em;
+/* ponytail: empty marker so titles without a review still sit in column 2 */
+.completed-list > li.completed-item > .completed-meta::before {
+  content: "";
+  width: 1em;
 }
 
 .completed-comment {
@@ -610,5 +611,14 @@ hr {
 
   .scale-end {
     min-width: 0;
+  }
+
+  .completed-meta {
+    grid-template-columns: 1em minmax(0, 1fr);
+  }
+
+  .completed-date {
+    grid-column: 2;
+    justify-self: end;
   }
 }
