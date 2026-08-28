@@ -10,19 +10,34 @@
 
 <body>
 
-  <main>
+  <div class="board">
 
-    <!-- About -->
-    <section id="about">
-      <h1>Davide Mornatta</h1>
-      <p class="subtitle">Co-Founder of Southwind AI — <a href="https://www.linkedin.com/in/davidemornatta/"
-          target="_blank" rel="noopener">LinkedIn</a> — <a href="mailto:davide.mornatta@southwind.ai">Mail</a></p>
-    </section>
+    <header class="cell head">
+      <h1>Davide <em>Mornatta</em></h1>
+    </header>
 
-    <hr />
+    <div class="cell fig">
+      <p class="lede">Co-Founder of <a href="https://southwind.ai" target="_blank" rel="noopener">Southwind AI</a></p>
+      <div class="stats">
+        <a class="stat" href="https://www.linkedin.com/in/davidemornatta/" target="_blank" rel="noopener">
+          <i></i>
+          <b>LinkedIn</b>
+          <span class="label">profile</span>
+        </a>
+        <a class="stat" href="mailto:davide.mornatta@southwind.ai">
+          <i></i>
+          <b>Mail</b>
+          <span class="label">write</span>
+        </a>
+        <a class="stat" href="https://southwind.ai" target="_blank" rel="noopener">
+          <i></i>
+          <b>Southwind</b>
+          <span class="label">startup</span>
+        </a>
+      </div>
+    </div>
 
-    <!-- Bio -->
-    <section id="me">
+    <section class="cell span-12" id="me">
       <h2>Me</h2>
       <p class="me">
         I grew up in northern Italy, and I'm currently based in Nice. <br><br>
@@ -35,18 +50,7 @@
       </p>
     </section>
 
-    <hr />
-
-    <!-- Southwind (standalone) -->
-    <section id="southwind">
-      <p class="care-standalone"><a href="https://southwind.ai" target="_blank" rel="noopener">My startup - Southwind
-          AI</a></p>
-    </section>
-
-    <hr />
-
-    <!-- Things I write / tools I create -->
-    <section id="care">
+    <section class="cell words" id="care">
       <h2>Things</h2>
       <ul class="care-list">
         <li><a href="excel-genes.html">Humanity renamed genes because of Excel</a></li>
@@ -56,10 +60,7 @@
       </ul>
     </section>
 
-    <hr />
-
-    <!-- Links to reads / projects I like -->
-    <section id="interesting">
+    <section class="cell panel" id="interesting">
       <h2>Interesting Stuff</h2>
       <ul class="care-list">
         <li><a href="http://www-graphics.stanford.edu/~tolis/toli/other/eyes.html" target="_blank" rel="noopener">Eyes
@@ -73,7 +74,7 @@
       </ul>
     </section>
 
-  </main>
+  </div>
 
 </body>
 

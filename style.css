@@ -1,4 +1,19 @@
-/* ── Reset & base ─────────────────────────────────── */
+/* Board on cream paper: grotesk for structure, Georgia for reading. */
+:root {
+  color-scheme: only light;
+  --grotesk: "Helvetica Neue", Helvetica, Roboto, ui-sans-serif, system-ui, Arial, sans-serif;
+  --serif: Georgia, "Times New Roman", serif;
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  --ground: #f5f2e7;
+  --ink: #0d0d0d;
+  --muted: #5f5f5f;
+  --accent: #de301e;
+  --blue: #0b5cab;
+  --yellow: #ffcf33;
+  --rule: 1px;
+  --pad: 16px 18px;
+}
+
 *,
 *::before,
 *::after {
@@ -7,141 +22,292 @@
   padding: 0;
 }
 
-/* ── Palette (earth tones) ────────────────────────── */
-:root {
-  --bg: #f5f0e8;
-  /* warm linen */
-  --surface: #ede6d8;
-  /* parchment */
-  --border: #c9bba8;
-  /* sand */
-  --text: #1a140d;
-  /* dark espresso */
-  --text-muted: #3d352c;
-  /* warm grey-brown */
-  --accent: #5c3d1e;
-  /* dark walnut */
-
-  --tag-book: #3b5323;
-  /* forest green */
-  --tag-series: #7a4a1e;
-  /* burnt sienna */
-  --tag-game: #2a3d5c;
-  /* slate blue */
+html {
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
-/* ── Typography & body ────────────────────────────── */
 body {
-  background-color: var(--bg);
-  color: var(--text);
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 1.2rem;
-  font-weight: 500;
-  line-height: 1.6;
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font: 400 17px/1.55 var(--serif);
+  -webkit-font-smoothing: antialiased;
 }
 
-main {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 2.5rem 1.25rem 3.5rem;
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
 }
 
+b {
+  font-weight: 700;
+}
+
+/* one link rule: ink, accent as the underline */
 a {
-  color: var(--accent);
+  color: inherit;
   text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1.5px;
   text-underline-offset: 3px;
+  text-decoration-skip-ink: none;
 }
 
-a:hover {
-  opacity: 0.75;
+a:hover,
+a:focus-visible {
+  color: var(--accent);
 }
+
+/* ---------------------------------------------------------------- the board */
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  border: var(--rule) solid var(--ink);
+  margin: 18px;
+}
+
+.cell {
+  border-bottom: var(--rule) solid var(--ink);
+  padding: var(--pad);
+  min-width: 0;
+  min-height: 0;
+}
+
+.board>.cell:last-child {
+  border-bottom: 0;
+}
+
+.cell.head {
+  grid-column: span 5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cell.fig {
+  grid-column: span 7;
+  border-left: var(--rule) solid var(--ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cell.say {
+  grid-column: span 5;
+}
+
+.cell.chart {
+  grid-column: span 7;
+  border-left: var(--rule) solid var(--ink);
+}
+
+.cell.span-12,
+.board.article .cell {
+  grid-column: 1 / -1;
+  border-left: 0;
+}
+
+.cell.words {
+  grid-column: 1 / span 6;
+  border-bottom: 0;
+}
+
+.cell.panel {
+  grid-column: 7 / span 6;
+  border-left: var(--rule) solid var(--ink);
+  border-bottom: 0;
+}
+
+.label,
+.completed-date,
+.result-famous-label {
+  font: 500 11px/1.3 var(--grotesk);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------------------------------------------------------------- type */
 
 h1 {
-  font-size: 2rem;
-  font-weight: bold;
-  letter-spacing: 0.02em;
-  color: var(--accent);
-  margin-bottom: 0.4rem;
+  margin: 0;
+  font: 700 clamp(1.45rem, 3.1vw, 2.35rem)/1.5 var(--grotesk);
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+h1 em {
+  font-style: normal;
+  background: var(--accent);
+  color: #fff;
+  padding: 0 0.12em;
 }
 
 h2 {
-  font-size: 1.2rem;
-  font-weight: bold;
-  letter-spacing: 0.08em;
+  font: 500 11px/1.3 var(--grotesk);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 0.5rem;
+  color: var(--muted);
+  margin: 0 0 12px;
 }
 
-p {
-  color: var(--text);
+.lede,
+.subtitle {
+  margin: 0 0 8px;
+  font: 500 clamp(1rem, 1.55vw, 1.2rem)/1.35 var(--grotesk);
+  letter-spacing: -0.02em;
 }
 
-hr {
-  border: none;
-  border-top: 1px solid var(--border);
-  margin: 1.5rem 0;
+.standfirst,
+.me,
+.rule-desc {
+  margin: 0;
+  max-width: 52ch;
+  font: 400 clamp(1.05rem, 1.4vw, 1.15rem)/1.55 var(--serif);
 }
 
-/* ── Sections ─────────────────────────────────────── */
-section {
+.lede:last-child,
+.subtitle:last-child {
   margin-bottom: 0;
 }
 
-.subtitle {
-  color: var(--text-muted);
-  margin-top: 0.35rem;
+.lede b {
+  color: var(--accent);
+  font-weight: 700;
 }
 
-.me {
-  font-size: 1rem;
-  color: var(--text-muted);
-  margin-bottom: 0.75rem;
+/* ---------------------------------------------------------------- stats (Bauhaus primaries) */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 14px;
 }
 
-.rule-desc {
-  font-size: 1rem;
-  color: var(--text-muted);
-  margin-bottom: 0.75rem;
+.stat {
+  text-decoration: none;
+  color: inherit;
 }
 
-/* ── Shared media list ────────────────────────────── */
-.media-list {
+.stat:hover,
+.stat:focus-visible {
+  color: inherit;
+}
+
+.stat:hover b,
+.stat:focus-visible b {
+  color: var(--accent);
+}
+
+.stat b {
+  display: block;
+  font: 700 clamp(1.05rem, 2vw, 1.6rem)/1 var(--grotesk);
+  letter-spacing: -0.04em;
+}
+
+.stat .label {
+  display: block;
+  margin-top: 6px;
+}
+
+.stat i {
+  display: block;
+  width: 100%;
+  height: 6px;
+  margin-bottom: 8px;
+}
+
+.stat:nth-child(1) i {
+  background: var(--accent);
+}
+
+.stat:nth-child(2) i {
+  background: var(--blue);
+}
+
+.stat:nth-child(3) i {
+  background: var(--yellow);
+}
+
+/* ---------------------------------------------------------------- lists */
+
+.care-list,
+.media-list,
+.result-famous {
   list-style: none;
 }
 
-/* ── Media type tags ──────────────────────────────── */
-.media-type {
+.care-list li {
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--ink);
+}
+
+.care-list li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.care-list li:first-child {
+  padding-top: 0;
+}
+
+hr {
+  display: none;
+}
+
+/* ---------------------------------------------------------------- back link */
+
+.back-link {
+  font-size: 0.7em;
+  text-decoration: none;
+  margin-right: 0.35em;
+  vertical-align: middle;
+  color: var(--accent);
+}
+
+.back-link:hover {
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------------- media */
+
+.media-type,
+.group-label {
   display: inline-block;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 0.9rem;
-  letter-spacing: 0.06em;
+  font: 500 11px/1.3 var(--grotesk);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 0.15em 0.5em;
-  border-radius: 2px;
-  color: var(--bg);
+  padding: 0.2em 0.5em;
+  color: #fff;
   flex-shrink: 0;
 }
 
-.media-type.book {
-  background-color: var(--tag-book);
+.media-type.book,
+.group-label.book {
+  background: var(--accent);
 }
 
-.media-type.series {
-  background-color: var(--tag-series);
+.media-type.series,
+.group-label.series {
+  background: var(--blue);
 }
 
-.media-type.game {
-  background-color: var(--tag-game);
+.media-type.game,
+.group-label.game {
+  background: var(--yellow);
+  color: var(--ink);
 }
 
-/* ── Current list ─────────────────────────────────── */
 .current-list .media-item {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.45rem 0;
-  border-bottom: 1px solid var(--border);
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--ink);
 }
 
 .current-list .media-item:last-child {
@@ -149,13 +315,11 @@ section {
 }
 
 .media-title {
-  font-size: 1.1rem;
-  color: var(--text);
+  font-size: 1.05rem;
 }
 
-/* ── Completed groups ─────────────────────────────── */
 .completed-group {
-  margin-bottom: 1.1rem;
+  margin-bottom: 1.25rem;
 }
 
 .completed-group:last-child {
@@ -163,34 +327,12 @@ section {
 }
 
 .group-label {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 0.9rem;
-  font-weight: bold;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  display: inline-block;
-  padding: 0.15em 0.5em;
-  border-radius: 2px;
-  color: var(--bg);
   margin-bottom: 0.75rem;
 }
 
-.group-label.book {
-  background-color: var(--tag-book);
-}
-
-.group-label.series {
-  background-color: var(--tag-series);
-}
-
-.group-label.game {
-  background-color: var(--tag-game);
-}
-
-/* ── Completed list ───────────────────────────────── */
 .completed-list .completed-item {
-  padding: 0.45rem 0;
-  border-bottom: 1px solid var(--border);
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--ink);
 }
 
 .completed-list .completed-item:last-child {
@@ -206,63 +348,33 @@ section {
 }
 
 .completed-date {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 0.9rem;
-  color: var(--text-muted);
   margin-left: auto;
 }
 
 .completed-comment {
   font-size: 1rem;
-  color: var(--text-muted);
-  font-style: italic;
+  color: var(--muted);
 }
 
-/* ── Things I care about ──────────────────────────── */
-.care-standalone {
-  margin: 0;
-}
+/* ---------------------------------------------------------------- article */
 
-.care-list {
-  list-style: none;
-  padding: 0;
-}
-
-.care-list li {
-  padding: 0.3rem 0;
-}
-
-/* ── Back link ────────────────────────────────────── */
-.back-link {
-  font-size: 1.4rem;
-  text-decoration: none;
-  margin-right: 0.4rem;
-  vertical-align: middle;
-}
-
-.back-link:hover {
-  opacity: 0.7;
-}
-
-/* ── Article (excel-genes) ────────────────────────── */
 .gene-list {
   list-style: none;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 1rem;
-  color: var(--text);
-  margin: 0 0 0.75rem 0.5rem;
-  line-height: 1.45;
+  font: 500 0.95rem/1.45 var(--mono);
+  margin: 0.75rem 0;
+  padding: 8px 12px;
+  border-left: var(--rule) solid var(--accent);
 }
 
 .tldr {
   margin-top: 1.25rem;
-  font-weight: bold;
-  color: var(--text);
+  font-weight: 700;
+  color: var(--accent);
 }
 
 .ref-list {
   font-size: 1rem;
-  color: var(--text-muted);
+  color: var(--muted);
   padding-left: 1.25rem;
 }
 
@@ -270,17 +382,16 @@ section {
   margin-bottom: 0.5rem;
 }
 
-/* ── Quiz ─────────────────────────────────────────── */
+/* ---------------------------------------------------------------- quiz */
+
 .quiz-fieldset {
   border: none;
-  padding: 0;
-  margin: 0 0 1.5rem 0;
+  padding: 0 0 1.25rem;
+  margin: 0 0 1.25rem;
+  border-bottom: 1px solid var(--ink);
 }
 
 .quiz-legend {
-  font-size: 1rem;
-  font-weight: bold;
-  color: var(--text);
   margin-bottom: 0.75rem;
   display: block;
 }
@@ -292,8 +403,10 @@ section {
 }
 
 .scale-end {
-  font-size: 0.85rem;
-  color: var(--text-muted);
+  font: 500 11px/1.3 var(--grotesk);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
   white-space: nowrap;
   min-width: 7rem;
 }
@@ -319,25 +432,25 @@ section {
 
 .quiz-submit {
   display: inline-block;
-  margin-top: 0.5rem;
-  padding: 0.5em 1.4em;
-  background-color: var(--accent);
-  color: var(--bg);
+  margin-top: 0.25rem;
+  padding: 0.7em 1.4em;
+  background: var(--ink);
+  color: var(--ground);
   border: none;
-  border-radius: 2px;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 1rem;
+  font: 700 13px/1 var(--grotesk);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   cursor: pointer;
-  letter-spacing: 0.04em;
 }
 
 .quiz-submit:hover {
-  opacity: 0.85;
+  background: var(--accent);
 }
 
-/* ── Quiz result ──────────────────────────────────── */
 .quiz-result {
-  margin-top: 0.5rem;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: var(--rule) solid var(--ink);
 }
 
 .quiz-result.hidden {
@@ -345,59 +458,43 @@ section {
 }
 
 .result-type {
-  font-size: 2.2rem;
-  font-weight: bold;
+  font: 700 clamp(1.8rem, 4vw, 2.6rem)/1 var(--grotesk);
+  letter-spacing: -0.04em;
   color: var(--accent);
-  letter-spacing: 0.12em;
   margin-bottom: 0.5rem;
 }
 
 .result-desc {
-  font-size: 1rem;
-  color: var(--text-muted);
-  font-style: italic;
+  color: var(--muted);
   margin-bottom: 1rem;
 }
 
 .result-famous-label {
-  font-size: 0.85rem;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--text-muted);
   margin-bottom: 0.4rem;
-}
-
-.result-famous {
-  list-style: none;
-  padding: 0;
-  margin: 0;
 }
 
 .result-famous-item {
   font-size: 1rem;
-  color: var(--text);
-  padding: 0.25rem 0;
-  border-bottom: 1px solid var(--border);
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--ink);
 }
 
 .result-famous-item:last-child {
   border-bottom: none;
 }
 
-/* ── Days together ────────────────────────────────── */
+/* ---------------------------------------------------------------- days together */
+
 .together-count {
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: var(--accent);
-  margin-bottom: 1.25rem;
+  font: 700 clamp(1.2rem, 2.4vw, 1.8rem)/1 var(--grotesk);
+  letter-spacing: -0.04em;
+  margin: 1rem 0;
 }
 
 .days-box {
   width: 100%;
   padding: 0.75rem;
-  background-color: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 2px;
+  border: var(--rule) solid var(--ink);
   display: flex;
   flex-wrap: wrap;
   gap: 3px;
@@ -406,12 +503,65 @@ section {
 .day-square {
   width: 11px;
   height: 11px;
-  border-radius: 2px;
-  background-color: var(--accent);
+  background: var(--ink);
   flex-shrink: 0;
 }
 
 .day-square.today {
-  outline: 1px solid var(--text);
-  outline-offset: 1px;
+  background: var(--accent);
+}
+
+.board.article h1 {
+  margin-bottom: 14px;
+}
+
+/* ---------------------------------------------------------------- stack / phone */
+
+@media (max-width: 1079px) {
+
+  .cell.head,
+  .cell.fig,
+  .cell.say,
+  .cell.chart,
+  .cell.words,
+  .cell.panel {
+    grid-column: span 12;
+    grid-row: auto;
+    border-left: 0;
+  }
+
+  .cell.words {
+    border-bottom: var(--rule) solid var(--ink);
+  }
+}
+
+@media (max-width: 700px) {
+  :root {
+    --pad: 14px 15px;
+  }
+
+  body {
+    font-size: 16px;
+  }
+
+  .board {
+    margin: 10px;
+  }
+
+  h1 {
+    font-size: clamp(1.35rem, 7.2vw, 2rem);
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .stat b {
+    font-size: 1.3rem;
+  }
+
+  .scale-end {
+    min-width: 0;
+  }
 }
