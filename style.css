@@ -284,6 +284,7 @@ hr {
   padding: 0.2em 0.5em;
   color: #fff;
   flex-shrink: 0;
+  margin: 0;
 }
 
 .media-type.book,
@@ -318,24 +319,60 @@ hr {
   font-size: 1.05rem;
 }
 
-.completed-group {
-  margin-bottom: 1.25rem;
+.completed-cat {
+  border-bottom: 1px solid var(--ink);
 }
 
-.completed-group:last-child {
-  margin-bottom: 0;
+.completed-cat:last-child {
+  border-bottom: 0;
 }
 
-.group-label {
-  margin-bottom: 0.75rem;
+.completed-cat > summary,
+.completed-item > summary {
+  cursor: pointer;
+  list-style: none;
 }
 
-.completed-list .completed-item {
+.completed-cat > summary::marker,
+.completed-item > summary::marker {
+  content: none;
+}
+
+.completed-cat > summary::-webkit-details-marker,
+.completed-item > summary::-webkit-details-marker {
+  display: none;
+}
+
+.completed-cat > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0;
+}
+
+.completed-cat > summary::before,
+.completed-item > summary::before {
+  content: "+";
+  font: 700 13px/1 var(--grotesk);
+  flex-shrink: 0;
+  width: 1em;
+}
+
+.completed-cat[open] > summary::before,
+.completed-item[open] > summary::before {
+  content: "−";
+}
+
+.completed-cat > .completed-list {
+  padding: 0 0 0.55rem 1.6em;
+}
+
+.completed-list > li {
   padding: 0.55rem 0;
   border-bottom: 1px solid var(--ink);
 }
 
-.completed-list .completed-item:last-child {
+.completed-list > li:last-child {
   border-bottom: none;
 }
 
@@ -343,17 +380,27 @@ hr {
   display: flex;
   align-items: baseline;
   gap: 0.75rem;
-  margin-bottom: 0.3rem;
   flex-wrap: wrap;
+}
+
+.completed-item > summary.completed-meta {
+  margin-bottom: 0;
 }
 
 .completed-date {
   margin-left: auto;
 }
 
+/* ponytail: Kundera has no review yet — pad to line up with titled rows that have a + */
+.completed-list > li.completed-item .completed-meta {
+  padding-left: 1.6em;
+}
+
 .completed-comment {
   font-size: 1rem;
   color: var(--muted);
+  max-width: 52ch;
+  margin: 0.3rem 0 0;
 }
 
 /* ---------------------------------------------------------------- article */
