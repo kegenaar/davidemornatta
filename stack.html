@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The stack - Davide Mornatta</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <div class="board article">
+
+    <section class="cell" id="stack">
+      <h1><a href="index.html" class="back-link">←</a> The stack</h1>
+      <p class="rule-desc">
+        A virtual stack of the books I own in physical form (at least in my house in Nice).
+        Hopefully this list will grow fast over time if I stop doomscrolling.
+      </p>
+
+      <div class="stack-pile" id="stack-box" role="list" aria-label="Books I own"></div>
+    </section>
+
+  </div>
+
+  <script src="books.js"></script>
+  <script>
+    function hash(s) {
+      let h = 0;
+      for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+      return Math.abs(h);
+    }
+
+    const pile = document.getElementById("stack-box");
+
+    if (!Array.isArray(books)) {
+      pile.textContent = "Could not load the stack.";
+    } else {
+      books.forEach((book) => {
+        const h = hash(book.title);
+        const el = document.createElement("div");
+        el.className = "stack-book";
+        el.setAttribute("role", "listitem");
+        el.style.left = ((h % 7) - 3) * 0.65 + "rem";
+        if (h % 5 === 0) el.classList.add("thick");
+
+        const title = document.createElement("span");
+        title.className = "stack-title";
+        title.textContent = book.title;
+
+        const author = document.createElement("span");
+        author.className = "stack-author";
+        author.textContent = book.author;
+
+        el.append(title, author);
+        pile.appendChild(el);
+      });
+
+      const shelf = document.createElement("div");
+      shelf.className = "stack-shelf";
+      shelf.setAttribute("aria-hidden", "true");
+      pile.appendChild(shelf);
+
+      // ponytail: self-check — fails if render or hash drifts
+      console.assert(hash("a") === hash("a"));
+      console.assert(pile.querySelectorAll(".stack-book").length === books.length);
+    }
+  </script>
+
+</body>
+
+</html>

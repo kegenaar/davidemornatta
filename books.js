@@ -1,0 +1,16 @@
+const books = [
+  { title: "Warbreaker", author: "Brandon Sanderson" },
+  { title: "The Final Empire", author: "Brandon Sanderson" },
+  { title: "La neve era sporca", author: "Georges Simenon" },
+  { title: "Città delle illusioni", author: "Ursula K. Le Guin" },
+  { title: "Cristallisation secrète", author: "Yoko Ogawa" },
+  { title: "Il gioco delle tre carte", author: "Marco Malvaldi" },
+  { title: "The Invisible Life of Addie LaRue", author: "V.E. Schwab" },
+  { title: "Se i gatti scomparissero dal mondo", author: "Genki Kawamura" },
+  { title: "L'insostenibile leggerezza dell'essere", author: "Milan Kundera" },
+  { title: "Le notti bianche", author: "Fëdor Dostoevskij" },
+  { title: "Convenience Store Woman", author: "Sayaka Murata" },
+  { title: "Welcome to the Hyunam-dong Bookshop", author: "Hwang Bo-reum" },
+  { title: "L'incolore Tazaki Tsukuru", author: "Haruki Murakami" },
+  { title: "A sud del confine, a ovest del sole", author: "Haruki Murakami" },
+];
