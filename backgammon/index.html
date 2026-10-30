@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tavola Reale — Learn backgammon</title>
+  <meta name="description" content="Learn backgammon from scratch: interactive lessons with a coach, then play against the computer.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2381b64c'/><circle cx='50' cy='50' r='26' fill='white'/></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <a class="logo" href="#/">
+        <svg viewBox="0 0 40 40" width="34" height="34" aria-hidden="true"><rect width="40" height="40" rx="9" fill="#81b64c"/><polygon points="8,6 16,6 12,22" fill="#fff" opacity=".9"/><polygon points="24,34 32,34 28,18" fill="#fff" opacity=".9"/><circle cx="28" cy="11" r="5" fill="#262421"/><circle cx="12" cy="29" r="5" fill="#fff"/></svg>
+        <span>Tavola<b>Reale</b></span>
+      </a>
+      <nav class="nav">
+        <a href="#/" data-route="home">
+          <svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></a>
+        <a href="#/lessons" data-route="lessons">
+          <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.9V17h2V9zM5 13.2v4L12 21l7-3.8v-4L12 17z"/></svg><span data-i18n="Learn|Impara">Learn</span></a>
+        <a href="#/play" data-route="play">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8" cy="8" r="1.8" fill="#262421"/><circle cx="16" cy="16" r="1.8" fill="#262421"/><circle cx="12" cy="12" r="1.8" fill="#262421"/></svg><span data-i18n="Play|Gioca">Play</span></a>
+        <a href="#/rules" data-route="rules">
+          <svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm8 1.5V8h4.5zM8 12h8v2H8zm0 4h8v2H8z"/></svg><span data-i18n="Rules|Regole">Rules</span></a>
+      </nav>
+      <div class="sidebar-foot">
+        <a class="icon-btn" href="../index.html" title="Davide Mornatta" aria-label="Davide Mornatta">←<span>Davide Mornatta</span></a>
+        <button id="langToggle" class="icon-btn lang"></button>
+        <button id="soundToggle" class="icon-btn"></button>
+      </div>
+    </aside>
+    <main id="view"></main>
+  </div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/insights.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/explain.js"></script>
+  <script src="js/turn.js"></script>
+  <script src="js/lessons.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/lesson-view.js"></script>
+  <script src="js/play-view.js"></script>
+  <script>BG.start();</script>
+</body>
+</html>
