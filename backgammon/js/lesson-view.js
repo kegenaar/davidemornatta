@@ -11,6 +11,8 @@
       const lesson = BG.LESSONS[idx];
       this.lesson = lesson;
       this.idx = idx;
+      this.completed = false;
+      this.ctrl = null;
       el.appendChild(BG.h(`<div class="layout">
         <div class="board-col"><div class="board-holder"><div id="lb"></div></div></div>
         <aside class="panel">
@@ -34,6 +36,9 @@
       this.$('.prev').onclick = () => this.go(this.step - 1);
       this.$('.next').onclick = () => this.next();
       this.onKey = (e) => {
+        // A focused button/link already reacts to Enter: handling it here too would skip a step.
+        if (e.key === 'Enter' && e.target.closest && e.target.closest('button, a')) return;
+        if (this.completed || e.altKey || e.ctrlKey || e.metaKey || e.repeat) return;
         if (e.key === 'ArrowRight' || e.key === 'Enter') { if (this.solved) this.next(); }
         else if (e.key === 'ArrowLeft') this.go(this.step - 1);
       };
@@ -43,6 +48,7 @@
 
     unmount() {
       document.removeEventListener('keydown', this.onKey);
+      if (this.ctrl) { this.ctrl.detach(); this.ctrl = null; }
       this.token = null;
     },
 
@@ -231,6 +237,9 @@
       BG.save();
       BG.Sound.play('win');
       const nextL = BG.LESSONS[this.idx + 1];
+      if (this.ctrl) { this.ctrl.detach(); this.ctrl = null; }
+      this.token = {};
+      this.completed = true;
       this.step = this.lesson.steps.length;
       this.renderSteps();
       this.$('.panel-body').innerHTML = `<div class="complete">

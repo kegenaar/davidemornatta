@@ -47,9 +47,12 @@
       this.$ = (s) => el.querySelector(s);
       this.board = new BG.Board(this.$('#pb'), { showNumbers: set.showNumbers, showTargets: set.showMoves });
 
+      // After a mouse change, drop focus so Space goes back to rolling the dice.
+      const releaseFocus = (ctl) => { if (!ctl.matches(':focus-visible')) ctl.blur(); };
       el.querySelectorAll('[data-opt]').forEach((cb) => {
         cb.checked = !!set[cb.dataset.opt];
         cb.onchange = () => {
+          releaseFocus(cb);
           set[cb.dataset.opt] = cb.checked;
           BG.save();
           this.board.opts.showNumbers = set.showNumbers;
@@ -60,17 +63,35 @@
       const lvl = this.$('.level');
       lvl.value = set.level;
       lvl.onchange = () => {
+        releaseFocus(lvl);
         set.level = lvl.value;
         BG.save();
         this.say(t(`Level set to <b>${LEVELS[lvl.value]}</b>: it applies from the next game.`, `Livello impostato su <b>${LEVELS[lvl.value]}</b>: vale dalla prossima partita.`));
       };
       this.$('.new').onclick = () => this.newGame();
-      this.$('.resign').onclick = () => {
-        if (!this.g || this.g.phase === 'over' || this.g.phase === 'opening') return;
-        if (confirm(t('Do you really want to resign the game?', 'Vuoi davvero abbandonare la partita?'))) this.endGame(B, true);
+      // Resigning takes two clicks (no native confirm dialog): the first arms the button for a few seconds.
+      const resign = this.$('.resign');
+      const resignLabel = resign.innerHTML;
+      this.disarmResign = () => {
+        clearTimeout(this.resignTimer);
+        resign.classList.remove('armed');
+        resign.innerHTML = resignLabel;
+      };
+      resign.onclick = () => {
+        if (!this.canResign()) return;
+        if (!resign.classList.contains('armed')) {
+          resign.classList.add('armed');
+          resign.innerHTML = `⚑ ${t('Confirm?', 'Confermi?')}`;
+          this.resignTimer = setTimeout(this.disarmResign, 3500);
+          return;
+        }
+        this.disarmResign();
+        this.endGame(B, true);
       };
       this.onKey = (e) => {
-        if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') return;
+        // Space is the game key even on a focused button (preventDefault stops its activation);
+        // switches and the level select keep their own keys for keyboard users.
+        if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT' || e.altKey || e.repeat) return;
         const g = this.g;
         if (!g) return;
         if (e.code === 'Space') {
@@ -78,9 +99,9 @@
           if (g.phase === 'opening') this.openingRoll();
           else if (g.phase === 'roll') this.userRoll();
           else if (g.phase === 'move' && g.ctrl && g.ctrl.done) this.confirm();
-        } else if ((e.key === 'z' && (e.ctrlKey || e.metaKey)) || e.key === 'Backspace') {
-          if (g.phase === 'move' && g.ctrl) g.ctrl.undo();
-        } else if (e.key === 'h' || e.key === 'H') {
+        } else if (((e.key === 'z' || e.key === 'Z') && (e.ctrlKey || e.metaKey)) || e.key === 'Backspace') {
+          if (g.phase === 'move' && g.ctrl) { e.preventDefault(); g.ctrl.undo(); }
+        } else if ((e.key === 'h' || e.key === 'H') && !e.ctrlKey && !e.metaKey) {
           if (g.phase === 'move') this.hint();
         }
       };
@@ -90,7 +111,14 @@
 
     unmount() {
       document.removeEventListener('keydown', this.onKey);
+      clearTimeout(this.resignTimer);
+      if (this.g && this.g.ctrl) this.g.ctrl.detach();
       this.g = null;
+    },
+
+    canResign() {
+      const g = this.g;
+      return !!g && g.phase !== 'over' && g.phase !== 'opening';
     },
 
     say(html, kind) {
@@ -108,10 +136,13 @@
       box.classList.remove('hidden');
     },
 
-    alive(g) { return this.g === g; },
+    // A pending async step (dice delay, computer animation) may only continue
+    // while its game is still the current one and hasn't ended (e.g. by resigning).
+    alive(g) { return this.g === g && g.phase !== 'over'; },
 
     newGame() {
       if (this.g && this.g.ctrl) this.g.ctrl.detach();
+      if (this.disarmResign) this.disarmResign();
       const g = { state: BG.initialState(), phase: 'opening', log: [], level: BG.settings.level, ctrl: null };
       this.g = g;
       this.$('.lvl').textContent = LEVELS[g.level];
@@ -133,6 +164,7 @@
       this.$('.off-b').textContent = s.off.b;
       this.$('.player-bar.bottom').classList.toggle('turn', ['roll', 'move'].includes(g.phase));
       this.$('.player-bar.top').classList.toggle('turn', g.phase === 'ai');
+      this.$('.resign').disabled = !this.canResign();
       this.renderControls();
       this.renderLog();
     },
@@ -227,8 +259,8 @@
       });
       if (g.ctrl.noMovesAtAll) {
         const why = g.state.bar.w ? t(': you can\'t enter from the bar', ': non riesci a rientrare dalla barra') : '';
-        this.say(t(`You rolled <b>${dice.join('-')}</b> but there's no legal move${why}. The turn passes to the computer.`,
-          `Hai tirato <b>${dice.join('-')}</b> ma non esiste nessuna mossa possibile${why}. Il turno passa al computer.`));
+        this.say(t(`You rolled <b>${dice.join('-')}</b> but there's no legal move${why}. Pass the turn to the computer.`,
+          `Hai tirato <b>${dice.join('-')}</b> ma non esiste nessuna mossa possibile${why}. Passa il turno al computer.`));
       } else {
         const dbl = dice[0] === dice[1] ? t(' It\'s a <b>double</b>: you have four moves!', ' È un <b>doppio</b>: hai quattro mosse!') : '';
         const bar = g.state.bar.w ? t(' First you must <b>enter</b> your checker from the bar.', ' Prima devi far <b>rientrare</b> la pedina dalla barra.') : '';
@@ -253,7 +285,7 @@
       const g = this.g;
       if (g.phase !== 'move') return;
       const c = g.ctrl;
-      if (!c.done) return;
+      if (!c || !c.done || c.animating) return;
       c.detach();
       g.ctrl = null;
       g.state = c.state;
@@ -320,10 +352,12 @@
       if (!this.alive(g)) return;
       const choice = BG.chooseTurn(g.state, B, values, g.level);
       const moves = choice ? choice.moves : [];
+      const stuck = t(`The computer rolled <b>${dice.join('-')}</b> and can't move.`, `Il computer ha tirato <b>${dice.join('-')}</b> e non può muovere.`) +
+        (g.state.bar.b ? t(' It can\'t enter from the bar!', ' Non riesce a rientrare dalla barra!') : '');
       if (!moves.length) {
-        this.say(t(`The computer rolled <b>${dice.join('-')}</b> and can't move.`, `Il computer ha tirato <b>${dice.join('-')}</b> e non può muovere.`) +
-          (g.state.bar.b ? t(' It can\'t enter from the bar!', ' Non riesce a rientrare dalla barra!') : ''));
+        this.say(stuck);
         await BG.delay(900);
+        if (!this.alive(g)) return;
       }
       let s = g.state;
       for (const m of moves) {
@@ -339,8 +373,14 @@
       g.state = s;
       g.log.push({ player: B, dice, moves });
       this.board.set({ lastMove: this.moveLocs(moves, B) });
-      if (moves.some((m) => m.hit)) this.say(t('The computer <b>hit</b> one of your checkers: you\'ll have to bring it in from the bar.', 'Il computer ha <b>colpito</b> una tua pedina: dovrai farla rientrare dalla barra.'));
       if (BG.winner(g.state)) return this.endGame(B);
+      const played = moves.length
+        ? t(`The computer played <b>${BG.turnText(moves, B)}</b> with ${dice.join('-')}.`, `Il computer ha giocato <b>${BG.turnText(moves, B)}</b> con ${dice.join('-')}.`)
+        : stuck;
+      const hit = moves.some((m) => m.hit)
+        ? t(' It <b>hit</b> one of your checkers: you\'ll have to bring it in from the bar.', ' Ha <b>colpito</b> una tua pedina: dovrai farla rientrare dalla barra.')
+        : '';
+      this.say(`${played}${hit} ${t('Your turn: roll the dice.', 'Tocca a te: lancia i dadi.')}`);
       g.phase = 'roll';
       this.renderAll();
     },
@@ -348,6 +388,7 @@
     endGame(winner, resigned) {
       const g = this.g;
       if (g.ctrl) { g.ctrl.detach(); g.ctrl = null; }
+      this.disarmResign();
       g.phase = 'over';
       const value = resigned ? 1 : BG.resultValue(g.state, winner);
       const type = { 1: t('Single win', 'Vittoria semplice'), 2: 'Gammon', 3: 'Backgammon' }[value];

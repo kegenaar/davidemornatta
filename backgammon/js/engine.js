@@ -231,12 +231,34 @@
     return from + '/' + to + (m.hit ? '*' : '');
   }
 
+  // A checker moved with several dice is written as one chain (13/8 8/5 → 13/5),
+  // keeping any intermediate hit (13/8*/5). Identical chains are grouped: 13/7(2).
   function turnText(moves, player) {
     if (!moves.length) return BG.t('no move', 'nessuna mossa');
+    const chains = [];
+    for (const m of moves) {
+      // A bear-off stays its own step (6/4 4/off reads better than 6/off for a learner).
+      const prev = m.to === offPoint(player) ? null : chains.find((c) => c.steps[c.steps.length - 1].to === m.from);
+      if (prev) prev.steps.push(m);
+      else chains.push({ steps: [m] });
+    }
+    // Farthest checker first (the bar counts as farthest).
+    const dist = (p) => (player === W ? p : 25 - p);
+    chains.sort((a, b) => dist(b.steps[0].from) - dist(a.steps[0].from));
+    const pt = (p, isFrom) => (isFrom && p === barPoint(player) ? BG.t('bar', 'barra')
+      : !isFrom && p === offPoint(player) ? BG.t('off', 'fuori') : String(p));
+    const chainText = ({ steps }) => {
+      let s = pt(steps[0].from, true);
+      steps.forEach((m, i) => {
+        const last = i === steps.length - 1;
+        if (last || m.hit) s += '/' + pt(m.to, false) + (m.hit ? '*' : '');
+      });
+      return s;
+    };
     const parts = [];
     const counts = new Map();
-    for (const m of moves) {
-      const t = moveText(m, player);
+    for (const c of chains) {
+      const t = chainText(c);
       if (!counts.has(t)) parts.push(t);
       counts.set(t, (counts.get(t) || 0) + 1);
     }

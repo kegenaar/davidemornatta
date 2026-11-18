@@ -25,11 +25,15 @@
 
   function cannotBearOff(s, player) {
     const n = outsideHome(s, player);
+    const onBar = s.bar[player];
+    const barNote = !onBar ? ''
+      : onBar === 1 ? t(' (including the one on the bar)', ' (compresa quella sulla barra)')
+      : t(` (including the ${onBar} on the bar)`, ` (comprese le ${onBar} sulla barra)`);
     return t(
       `You can't bear off yet: first bring <b>all 15</b> checkers into your home board (${HOME[player]}). ` +
-        `You still have <b>${ped(n)}</b> outside${s.bar[player] ? ' (including the one on the bar)' : ''}.`,
+        `You still have <b>${ped(n)}</b> outside${barNote}.`,
       `Non puoi ancora far uscire pedine: prima devi portare <b>tutte e 15</b> le pedine nella tua casa (${HOME[player]}). ` +
-        `Ne hai ancora <b>${ped(n)}</b> fuori${s.bar[player] ? ' (compresa quella sulla barra)' : ''}.`);
+        `Ne hai ancora <b>${ped(n)}</b> fuori${barNote}.`);
   }
 
   function hasFarther(s, player, p) {

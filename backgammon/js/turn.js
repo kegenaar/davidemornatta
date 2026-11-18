@@ -15,6 +15,8 @@
       this.onChange = onChange || (() => {});
       this.onReject = onReject || (() => {});
       this.enabled = true;
+      this.detached = false;
+      this.animating = false;
       this.selected = null;
       this.targetPaths = new Map();
       this._refresh();
@@ -52,7 +54,7 @@
     }
 
     canPick(loc) {
-      return this.enabled && this.legal.some((m) => this.fromLoc(m) === loc);
+      return this.enabled && !this.animating && this.legal.some((m) => this.fromLoc(m) === loc);
     }
 
     pick(loc) {
@@ -65,7 +67,7 @@
     // Click o trascinamento non valido: spiega il motivo.
     // from = pedina selezionata (o null se l'utente ha cliccato una pedina non movibile).
     reject(loc, from) {
-      if (!this.enabled || this.done) return;
+      if (!this.enabled || this.animating || this.done) return;
       const msg = from != null
         ? BG.explainDrop(this.state, this.player, this.remaining, from, loc)
         : BG.explainPick(this.state, this.player, this.remaining, loc);
@@ -107,12 +109,15 @@
 
     async drop(loc, animate) {
       const path = this.targetPaths.get(loc);
-      if (!path || !this.enabled) return;
+      if (!path || !this.enabled || this.animating) return;
       this.selected = null;
       this.targetPaths = new Map();
       this.board.selected = null;
       this.board.targets = [];
-      for (const m of path) await this.applyMove(m, animate);
+      for (const m of path) {
+        if (this.detached) return;
+        await this.applyMove(m, animate);
+      }
     }
 
     async applyMove(m, animate = true) {
@@ -125,9 +130,11 @@
       this._refresh();
       this.board.dice = [this.diceView()];
       if (animate) {
-        this.enabled = false;
+        this.animating = true;
         await this.board.animateMove(before, after, m, this.player);
-        this.enabled = true;
+        this.animating = false;
+        // The turn may have been abandoned (new game, other step) during the animation.
+        if (this.detached) return;
       } else {
         BG.Sound.play(m.hit ? 'hit' : 'move');
       }
@@ -136,6 +143,7 @@
     }
 
     undo() {
+      if (this.animating || this.detached) return;
       const h = this.history.pop();
       if (!h) return;
       this.moves.pop();
@@ -148,11 +156,13 @@
     }
 
     undoAll() {
-      while (this.history.length) this.undo();
+      // undo() is a no-op while animating or detached: stop instead of spinning forever.
+      while (this.history.length && !this.animating && !this.detached) this.undo();
     }
 
     detach() {
       this.enabled = false;
+      this.detached = true;
       if (this.board.interaction === this) this.board.interaction = null;
       this.board.set({ selected: null, targets: [] });
     }

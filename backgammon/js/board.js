@@ -140,6 +140,12 @@
       el.addEventListener('pointerup', (e) => this._up(e));
       el.addEventListener('pointercancel', () => this._cancelDrag());
       el.addEventListener('contextmenu', (e) => e.preventDefault());
+      // The page can scroll by swiping over the board (touch-action: manipulation);
+      // only a touch that grabs a checker (or a drag in progress) blocks scrolling.
+      el.addEventListener('touchstart', (e) => {
+        const tch = e.touches[0];
+        if (this.drag || (tch && e.touches.length === 1 && this._grabs(tch))) e.preventDefault();
+      }, { passive: false });
       this.render();
     }
 
@@ -329,6 +335,14 @@
       return checkerXY(loc, player, Math.max(0, n - 1), Math.max(1, n));
     }
 
+    _grabs(e) {
+      const it = this.interaction;
+      if (this.busy || !this.svg || !it) return false;
+      const p = this._svgPoint(e);
+      const loc = this.locAt(p.x, p.y);
+      return loc != null && it.canPick(loc);
+    }
+
     _down(e) {
       if (this.busy || !this.svg) return;
       const p = this._svgPoint(e);
@@ -357,8 +371,23 @@
       if (it.reject) it.reject(loc, sel);
     }
 
+    // Pointer cursor over anything clickable (mouse only).
+    _hover(e) {
+      if (e.pointerType !== 'mouse' || !this.svg) return;
+      let ok = false;
+      if (!this.busy) {
+        const p = this._svgPoint(e);
+        const loc = this.locAt(p.x, p.y);
+        const it = this.interaction;
+        if (loc != null) {
+          ok = it ? it.canPick(loc) || (this.selected != null && this.targets.some((tg) => tg.loc === loc)) : !!this.onLocClick;
+        }
+      }
+      this.el.style.cursor = ok ? 'pointer' : '';
+    }
+
     _move(e) {
-      if (!this.drag) return;
+      if (!this.drag) { this._hover(e); return; }
       const p = this._svgPoint(e);
       const d = this.drag;
       if (!d.moved && Math.hypot(p.x - d.start.x, p.y - d.start.y) > 6) {
@@ -368,25 +397,30 @@
         this.animLayer.innerHTML = checkerSVG(0, 0, d.player, 'class="ghost" filter="url(#sh)"');
         d.ghost = this.animLayer.firstChild;
       }
-      if (d.moved && d.ghost) d.ghost.setAttribute('transform', `translate(${p.x},${p.y}) scale(1.08)`);
+      if (d.moved && d.ghost) {
+        d.ghost.setAttribute('transform', `translate(${p.x},${p.y}) scale(1.08)`);
+        this.el.style.cursor = 'grabbing';
+      }
     }
 
     _up(e) {
       const d = this.drag;
       if (!d) return;
       this.drag = null;
+      this.el.style.cursor = '';
       const p = this._svgPoint(e);
       const loc = this.locAt(p.x, p.y);
+      const it = this.interaction;
       if (d.moved) {
         this.hidden = [];
-        if (loc != null && loc !== d.loc && this.targets.some((t) => t.loc === loc)) {
-          this.interaction.drop(loc, false);
+        if (it && loc != null && loc !== d.loc && this.targets.some((t) => t.loc === loc)) {
+          it.drop(loc, false);
         } else {
           this.render();
-          if (loc != null && loc !== d.loc && this.interaction.reject) this.interaction.reject(loc, d.loc);
+          if (it && loc != null && loc !== d.loc && it.reject) it.reject(loc, d.loc);
         }
-      } else if (d.wasSelected) {
-        this.interaction.clear();
+      } else if (d.wasSelected && it) {
+        it.clear();
       }
     }
 
@@ -394,6 +428,7 @@
       if (!this.drag) return;
       this.drag = null;
       this.hidden = [];
+      this.el.style.cursor = '';
       this.render();
     }
 

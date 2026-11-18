@@ -134,7 +134,7 @@
 
   function homePoints(s, player) {
     let n = 0;
-    for (let i = 1; i <= 7; i++) {
+    for (let i = 1; i <= 6; i++) {
       const p = player === BG.W ? i : 25 - i;
       if (BG.count(s, p, player) >= 2) n++;
     }
