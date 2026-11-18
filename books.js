@@ -13,4 +13,5 @@ const books = [
   { title: "Welcome to the Hyunam-dong Bookshop", author: "Hwang Bo-reum" },
   { title: "L'incolore Tazaki Tsukuru", author: "Haruki Murakami" },
   { title: "A sud del confine, a ovest del sole", author: "Haruki Murakami" },
+  { title: "A Dictionary of Color Combinations", author: "Sanzo Wada" },
 ];
